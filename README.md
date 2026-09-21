@@ -2,7 +2,7 @@
 
 This repository contains the template for deploying a K8s cluster on a MacBook. Use this repository template to create a new repository and follow the instructions below to deploy a K8s cluster.
 
-It is designed to use the Docker Kubernetes deployed from Docker Dashboard but can be used with any Kubernetes cluster.
+It is designed to use the Docker Kubernetes deployed from Docker Dashboard but can be used with any a Kind cluster too.
 
 ## Prerequisites
 
@@ -22,13 +22,23 @@ Replace `...` occurences with with correct values.
 
 Also edit `resources/github-sample.sh` and `resources/newrelic-sample.sh`. Rename these files to `-secrets.sh` and edit to add your GitHub PAT tokens and NewRelic account information. Files with `-secrets.sh` suffix will not be committed to your repository.
 
-You will need a PAT token with read access to the `mac-k8s` repository and your own copy of this repository and another one with write access to your copy of this repository.
+The setup.sh script assumes you have a two GitHub fine grain PAT tokens. Set these in your bash profile...
 
-Start or reset the Kubernetes cluster using the Docker Dashboard then change into your configuration repository. Do `direnv allow` to source the `.envrc` file and then run the `setup.sh` script.
+```bash
+export GITHUB_TOKEN_GITOPS_WRITE=...
+export GITHUB_TOKEN_GITOPS_READ=...
+```
+
+The `GITHUB_TOKEN_GITOPS_WRITE` token should have write access to your configuration repository, i.e. the repository you create from this template.
+The `GITHUB_TOKEN_GITOPS_READ` needs read access for the `mac-k8s` repository and your configuration repository.
+
+If you are using Docker Kubernetes, start or reset the Kubernetes cluster using the Docker Dashboard then change into your configuration repository. Do `direnv allow` to source the `.envrc` file and then run the `setup.sh` script.
+
+If you want to use a Kind cluster you should use the `--kind` option when running `setup.sh`. you may want to edit the `kind.yaml` file in the resources folder before deploying the Kind cluster. 
 
 ## Deploy
 
-Once Flux has deployed the cluster
+The `setup.sh` script will deploy core utilities like Flux, Kyverno, Vault, External Secrets, Reloader etc. 
 
 ## Destroy
 
