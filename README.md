@@ -15,8 +15,16 @@ It can use the Docker Kubernetes cluster deployed from the Docker Dashboard, or 
 - [envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) (required by various scripts, `brew install gettext`)
 - [openssl](https://www.openssl.org/source/) (required to generate cluster certificate)
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) (optional, required for the `--kind` option, `brew install kind`)
+- [OpenShift Local (crc)](https://crc.dev/docs/installing/) and [oc](https://docs.openshift.com/container-platform/latest/cli_reference/openshift_cli/getting-started-cli.html) (optional, required for OpenShift Local clusters)
 - [Helm](https://helm.sh/docs/intro/install/) (optional, required for kind clusters using the Cilium or Calico CNI)
 - [direnv](https://direnv.net/docs/installation.html) (optional)
+- envsubst-a8m - See below (required to parse template files)
+
+```bash
+curl -L https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-`uname -s`-`uname -m` -o envsubst
+chmod +x envsubst
+sudo mv envsubst /usr/local/bin
+```
 
 ## Setup
 
@@ -69,6 +77,14 @@ Change into your configuration repository and do `direnv allow` to source the `.
 
 Start or reset the Kubernetes cluster using the Docker Dashboard, then run the `setup.sh` script.
 
+### OpenShift Local (crc)
+
+Start the cluster using `crc start` and log in as `kubeadmin`, e.g. `eval $(crc oc-env)` then `oc login -u kubeadmin https://api.crc.testing:6443`, then run the `setup.sh` script. `setup.sh` detects an OpenShift Local cluster when the current context's api server is `https://api.crc.testing:6443` and runs `crc-setup.sh`, which deploys the OpenShift equivalents of the core components using `resources/flux-crc.yaml` in the mac-k8s repository, see the mac-k8s README.
+
+For OpenShift Local clusters, `crc-setup.sh` configures OVN-Kubernetes to route egress traffic via the host network stack, setting `routingViaHost` in the cluster network operator configuration, if not already set, and waits for the network operator to apply the change.
+
+Docker Kubernetes and OpenShift Local both bind ports 80 and 443 on the host, so only run one of them at a time.
+
 ### Kind
 
 Run `setup.sh --kind` to create a kind cluster and deploy to it. If a kind cluster named `$CLUSTER_NAME` already exists it is used rather than recreated. The cluster can also be created on its own using `kind-cluster.sh`.
@@ -94,6 +110,26 @@ The available extras are:
 | `audit` | Kubernetes API audit logging to `$KIND_DATA_DIR/audit` |
 
 The kind configuration is the `resources/kind.yaml` file in the mac-k8s repository. To change it, copy it to `resources/kind.yaml` in your configuration repository and edit it, it is passed through `envsubst` so it can reference environment variables. Extras can be overridden or added in the same way, in `resources/kind-extras`.
+
+### Local OpenShift CRC Deployment
+
+For a local CRC cluster [instructions](https://crc.dev/docs/using/) to deploy a local OpenShift cluster.
+
+> Before running `setup.sh`, set following configuration setting...
+> ```bash
+> crc config set cpus 8
+> crc config set memory 20000
+> crc config set disk-size 200
+> crc config set enable-cluster-monitoring true
+> crc start
+> ```
+
+Then use the `oc login` command to login to the cluster. You can automate this process by adding the password to your `~/.bash_profile` file. After doing so you need to source the `~/.bash_profile` or set perform the export command in your shell.
+
+```bash
+export CRC_PASSWORD=...
+oc login -u kubeadmin -p ${CRC_PASSWORD}  https://api.crc.testing:6443
+```
 
 ### Deployed components
 
