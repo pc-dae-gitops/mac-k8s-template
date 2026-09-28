@@ -1,6 +1,3 @@
-CONFIDENTIALITY: PUBLIC
-STATUS: DRAFT - UNREVIEWED
-
 # Template for deploying K8s Cluster
 
 This repository contains the template for deploying a K8s cluster on a MacBook. Use this repository template to create a new repository and follow the instructions below to deploy a K8s cluster.
@@ -133,8 +130,8 @@ For kind, run `kind-cluster.sh --delete`. The local registry and mirror containe
 | AI Platform | Claude Code, VS Code extension (Anthropic) |
 | Human Accountable | Paul Carlton |
 | Date of Generation | 28 September 2026 |
-| Document Status | DRAFT - UNREVIEWED |
-| Human Oversight Record | Unreviewed |
+| Document Status | REVIEWED |
+| Human Oversight Record | reviewed |
 | Personal Data Flag | No personal data. |
 | Intended Audience | Public, users of this repository template |
 | Known Limitations | Tested with kind v0.33.0 on macOS. Docker Kubernetes behaviour of the new kind related changes has not been retested. |
