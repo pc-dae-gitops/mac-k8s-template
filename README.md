@@ -133,17 +133,14 @@ Docker Kubernetes and OpenShift Local both bind ports 80 and 443 on the host, so
 
 The `setup.sh` script deploys Flux, which deploys core utilities: Kyverno, cert-manager, ingress-nginx, Vault, External Secrets, Reloader, Secrets Store CSI driver, metrics-server and kube-state-metrics. It then initialises and unseals Vault and loads secrets.
 
-Addons, namespaces and applications are deployed by listing them in files in `resource-descriptions`:
+Applications are deployed by listing them in files in `resource-descriptions`:
 
-- `addons.yaml`, addons from the mac-k8s `local-cluster/addons` directory, e.g. grafana, loki, tempo, otel-collector or newrelic
+- `apps.yaml`, applications from the mac-k8s `local-cluster/apps` directory, e.g. grafana, loki, tempo, otel-collector or newrelic
 
   ```yaml
-  addons:
+  apps:
     - name: grafana
   ```
-
-- `namespaces.yaml`, namespaces to create
-- `apps.yaml`, applications to deploy
 
 ## Destroy
 
