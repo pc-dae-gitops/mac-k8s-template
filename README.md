@@ -58,7 +58,7 @@ Other secrets are loaded into Vault by `secrets.sh` from JSON files in `resource
 Ingress host names are subdomains of `local_dns`, set in `.envrc`, which defaults to `kubernetes.local.internal`. Add the host names you use to `/etc/hosts`, e.g.
 
 ```text
-127.0.0.1        vault.kubernetes.local.internal grafana.kubernetes.local.internal
+127.0.0.1        vault.kubernetes.local.internal grafana.kubernetes.local.internal loki.kubernetes.local.internal victoria-metrics.kubernetes.local.internal
 ```
 
 `setup.sh` warns if `vault.${local_dns}` does not resolve.
@@ -133,14 +133,17 @@ Docker Kubernetes and OpenShift Local both bind ports 80 and 443 on the host, so
 
 The `setup.sh` script deploys Flux, which deploys core utilities: Kyverno, cert-manager, ingress-nginx, Vault, External Secrets, Reloader, Secrets Store CSI driver, metrics-server and kube-state-metrics. It then initialises and unseals Vault and loads secrets.
 
-Applications are deployed by listing them in files in `resource-descriptions`:
+Addons, namespaces and applications are deployed by listing them in files in `resource-descriptions`:
 
-- `apps.yaml`, applications from the mac-k8s `local-cluster/apps` directory, e.g. grafana, loki, tempo, otel-collector or newrelic
+- `addons.yaml`, addons from the mac-k8s `local-cluster/addons` directory, e.g. grafana, loki, tempo, otel-collector or newrelic
 
   ```yaml
-  apps:
+  addons:
     - name: grafana
   ```
+
+- `namespaces.yaml`, namespaces to create
+- `apps.yaml`, applications to deploy
 
 ## Destroy
 
