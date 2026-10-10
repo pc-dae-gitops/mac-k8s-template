@@ -2,7 +2,7 @@
 
 This repository contains the template for deploying a K8s cluster on a MacBook. Use this repository template to create a new repository and follow the instructions below to deploy a K8s cluster. It can also be used to deploy to a OpenShift CRC cluster running on a MacBook or an OpenShift hosted cluster.
 
-It can use the Docker Kubernetes cluster deployed from the Docker Dashboard, or create a [kind](https://kind.sigs.k8s.io/) cluster. The scripts and shared configuration are in the [mac-k8s](https://github.dev.global.tesco.org/UKE12446847/mac-k8s) repository, which should be cloned alongside your configuration repository.
+It can use the Docker Kubernetes cluster deployed from the Docker Dashboard, or create a [kind](https://kind.sigs.k8s.io/) cluster. The scripts and shared configuration are in the [mac-k8s](https://github.com/UKE12446847/mac-k8s) repository, which should be cloned alongside your configuration repository.
 
 ## Prerequisites
 
@@ -137,7 +137,7 @@ Docker Kubernetes and OpenShift Local both bind ports 80 and 443 on the host, so
 
 ### Deployed components
 
-The `setup.sh` script deploys Flux, which deploys core utilities: Kyverno, cert-manager, ingress-nginx, Vault, External Secrets, Reloader, Secrets Store CSI driver, metrics-server and kube-state-metrics. It then initialises and unseals Vault and loads secrets. ingress-nginx serves a wildcard certificate for `*.<dnsSuffix>`, signed by the local CA, and a "Service not found" page for hosts without an ingress. Vault serves HTTPS: its ingress re-encrypts to it, and External Secrets reads secrets through a `vault` SecretStore in each namespace that uses them, logging in with Vault's Kubernetes auth. Vault's server certificate is signed by the local CA on kind and Docker Desktop clusters, and by the OpenShift service CA on OpenShift clusters.
+The `setup.sh` script deploys Flux, which deploys core utilities: Kyverno, cert-manager, ingress-nginx, Vault, External Secrets, Reloader, Secrets Store CSI driver, metrics-server and kube-state-metrics. It then initialises and unseals Vault and loads secrets. ingress-nginx serves a wildcard certificate for `*.<dnsSuffix>`, signed by the local CA, and a "Service not found" page for hosts without an ingress.
 
 ## Destroy
 
